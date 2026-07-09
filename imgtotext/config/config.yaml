@@ -1,0 +1,156 @@
+# Configuration file for OCR system
+# Can be loaded with: config = ConfigLoader.load_config('config/config.yaml')
+
+# Image Preprocessing
+image:
+  width: 256
+  height: 32
+  channels: 1  # Grayscale
+  
+  # Preprocessing methods
+  denoise:
+    method: bilateral  # Options: bilateral, median, morphological
+    strength: 9
+  
+  normalization:
+    method: mean_std  # Options: mean_std, minmax, robust
+
+# Character Set
+characters:
+  set: "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 .,!?'-"
+  # Total classes = len(set) + 1 (for CTC blank token)
+
+# Model Architecture
+model:
+  type: cnn_lstm_ctc  # Options: cnn_lstm_ctc, transformer
+  
+  cnn:
+    filters: [32, 64, 128, 256]
+    kernel_sizes: [[3, 3], [3, 3], [3, 3], [3, 3]]
+    pool_sizes: [[2, 2], [2, 2], [2, 2], [2, 2]]
+    dropout_rate: 0.25
+  
+  rnn:
+    type: lstm  # Options: lstm, gru
+    units: 256
+    bidirectional: true
+    layers: 2
+    dropout_rate: 0.25
+  
+  transformer:
+    embed_dim: 256
+    num_heads: 8
+    num_layers: 4
+
+# CTC Decoding
+decoding:
+  method: beam_search  # Options: greedy, beam_search
+  beam_width: 50
+  confidence_threshold: 0.5
+
+# Training Configuration
+training:
+  batch_size: 32
+  epochs: 50
+  learning_rate: 0.001
+  validation_split: 0.2
+  early_stopping_patience: 5
+  
+  optimizer:
+    type: adam
+    learning_rate_schedule: exponential  # Options: constant, exponential, linear
+    decay_rate: 0.96
+    decay_steps: 1000
+  
+  callbacks:
+    checkpoint_best_only: true
+    reduce_lr_on_plateau: true
+    tensorboard_logging: true
+
+# Data Augmentation
+augmentation:
+  enabled: true
+  rotation:
+    enabled: true
+    angle_range: [-10, 10]
+  
+  shifts:
+    enabled: true
+    shift_range: [-0.1, 0.1]
+  
+  elastic_deformation:
+    enabled: true
+    alpha: 20
+    sigma: 3
+  
+  random_noise:
+    enabled: true
+    noise_level: 0.01
+  
+  blur:
+    enabled: true
+    kernel_size_range: [3, 5]
+
+# Model Paths
+paths:
+  model_dir: models
+  best_model: best_ocr_model.h5
+  checkpoint_dir: models/checkpoints
+  log_dir: logs
+  data_dir: data
+
+# Logging
+logging:
+  level: INFO  # Options: DEBUG, INFO, WARNING, ERROR, CRITICAL
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  file: logs/ocr.log
+
+# Inference
+inference:
+  batch_size: 32
+  confidence_threshold: 0.5
+  max_text_length: 50
+  
+  # Results formatting
+  output_format: json  # Options: json, csv
+  include_confidence: true
+  include_character_confidences: false
+
+# Fake News Detection Integration
+fake_news_detection:
+  enabled: true
+  
+  suspicious_keywords:
+    - fake
+    - hoax
+    - unverified
+    - rumor
+    - alleged
+    - supposedly
+    - apparently
+    - claims
+    - anonymous sources
+  
+  warning_thresholds:
+    excessive_exclamation_count: 2
+    excessive_caps_ratio: 0.3
+  
+  risk_levels:
+    low: 0
+    medium: 1
+    high: 2
+
+# Performance Optimization
+optimization:
+  use_gpu: true
+  mixed_precision: false
+  num_workers: 4
+  pin_memory: true
+
+# Data Validation
+validation:
+  min_image_width: 64
+  min_image_height: 16
+  max_image_width: 1024
+  max_image_height: 256
+  check_text_quality: true

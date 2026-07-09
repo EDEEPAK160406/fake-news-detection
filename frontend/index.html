@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fake News Detector</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Fira+Code:wght@500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="bg-layer"></div>
+
+  <header class="topbar glass">
+    <div class="brand-block">
+      <h1>Fake News Detector</h1>
+      <p>Modern multimodal verification workspace</p>
+    </div>
+    <button id="themeToggle" class="toggle-btn" type="button" aria-label="Toggle dark mode">Light Mode</button>
+  </header>
+
+  <main class="layout">
+    <aside class="sidebar glass" aria-label="Detection modes">
+      <button class="menu-item active" data-page="url" type="button">
+        <span class="icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M9 12a3 3 0 0 1 3-3h4a3 3 0 1 1 0 6h-4" stroke="currentColor" stroke-width="1.8"/><path d="M15 12a3 3 0 0 1-3 3H8a3 3 0 1 1 0-6h4" stroke="currentColor" stroke-width="1.8"/></svg>
+        </span>
+        <span>URL Detection</span>
+      </button>
+      <button class="menu-item" data-page="image" type="button">
+        <span class="icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none"><rect x="3.5" y="4.5" width="17" height="15" rx="2" stroke="currentColor" stroke-width="1.8"/><path d="M7 15l3-3 2.2 2.2 2.4-2.4L18 15" stroke="currentColor" stroke-width="1.8"/><circle cx="9" cy="9" r="1.4" fill="currentColor"/></svg>
+        </span>
+        <span>Image Authenticity</span>
+      </button>
+      <button class="menu-item" data-page="video" type="button">
+        <span class="icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none"><rect x="3.5" y="5" width="13" height="14" rx="2" stroke="currentColor" stroke-width="1.8"/><path d="M18 9l3-2v10l-3-2V9z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8 10.5l4 2.5-4 2.5v-5z" fill="currentColor"/></svg>
+        </span>
+        <span>Video Authenticity</span>
+      </button>
+      <button class="menu-item" data-page="text" type="button">
+        <span class="icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M4 6h16M4 10h16M4 14h10M4 18h8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+        </span>
+        <span>Text Detection</span>
+      </button>
+    </aside>
+
+    <section class="content">
+      <section id="page-url" class="page-card glass page active">
+        <h2>URL Detection</h2>
+        <p class="subtitle">Paste a news URL and inspect domain credibility patterns instantly.</p>
+        <label for="urlInput">News URL</label>
+        <input id="urlInput" type="url" placeholder="https://example.com/news-story" />
+        <div class="action-row">
+          <button id="analyzeUrl" class="primary" type="button">Analyze URL</button>
+          <button id="clearUrl" class="secondary" type="button">Clear</button>
+        </div>
+        <div id="urlResult" class="result-box hidden"></div>
+      </section>
+
+      <section id="page-image" class="page-card glass page">
+        <h2>Image Authenticity Detection</h2>
+        <p class="subtitle">Upload a JPG, PNG, or JPEG image and detect whether it looks AI-generated or original.</p>
+
+        <label class="dropzone" id="dropzone" for="imageInput">
+          <input id="imageInput" type="file" accept="image/*" hidden />
+          <strong>Drag and drop image here</strong>
+          <span>or click to browse</span>
+        </label>
+
+        <div class="image-preview-wrap hidden" id="imagePreviewWrap">
+          <img id="imagePreview" alt="Uploaded preview" />
+        </div>
+
+        <div class="overlay-preview-wrap hidden" id="imageOverlayWrap">
+          <strong>Suspicious region overlay</strong>
+          <img id="imageOverlay" alt="Suspicious regions overlay" />
+        </div>
+
+        <div class="action-row">
+          <button id="analyzeImage" class="primary" type="button">Analyze Authenticity</button>
+          <button id="clearImage" class="secondary" type="button">Clear</button>
+        </div>
+        <div id="imageResult" class="result-box hidden"></div>
+      </section>
+
+      <section id="page-video" class="page-card glass page">
+        <h2>Video Authenticity Detection</h2>
+        <p class="subtitle">Upload an MP4, AVI, or MOV file and detect whether the video looks real or manipulated.</p>
+
+        <label class="dropzone" id="videoDropzone" for="videoInput">
+          <input id="videoInput" type="file" accept="video/*" hidden />
+          <strong>Drag and drop video here</strong>
+          <span>or click to browse</span>
+        </label>
+
+        <div class="video-preview-wrap hidden" id="videoPreviewWrap">
+          <video id="videoPreview" controls></video>
+        </div>
+
+        <div class="action-row">
+          <button id="analyzeVideo" class="primary" type="button">Analyze Video</button>
+          <button id="clearVideo" class="secondary" type="button">Clear</button>
+        </div>
+
+        <div id="videoResult" class="result-box hidden"></div>
+        <div id="videoTimeline" class="timeline hidden" aria-label="Suspicious frame timeline"></div>
+      </section>
+
+      <section id="page-text" class="page-card glass page">
+        <h2>Text Detection</h2>
+        <p class="subtitle">Analyze article text, confidence score, and suspicious keywords.</p>
+        <label for="textInput">News Text</label>
+        <textarea id="textInput" rows="8" placeholder="Paste the full article or claim text..."></textarea>
+        <div class="action-row">
+          <button id="analyzeText" class="primary" type="button">Analyze Text</button>
+          <button id="clearText" class="secondary" type="button">Clear</button>
+        </div>
+        <div id="textResult" class="result-box hidden"></div>
+      </section>
+    </section>
+  </main>
+
+  <div id="loadingOverlay" class="loading-overlay hidden" role="status" aria-live="polite">
+    <div class="spinner"></div>
+    <p>Analyzing input...</p>
+  </div>
+
+  <div id="toastRoot" class="toast-root" aria-live="polite" aria-atomic="true"></div>
+
+  <footer class="footer glass">
+    <p>Fake News Detector | Built for real-time URL, image, video, and text verification.</p>
+  </footer>
+
+  <script src="app.js?v=20260428-1"></script>
+</body>
+</html>

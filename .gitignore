@@ -1,0 +1,8 @@
+__pycache__/
+*.pyc
+.venv/
+.env
+artifacts/*.joblib
+artifacts/*.pt
+data/large_text_detection_100k.csv
+tools/ffmpeg/

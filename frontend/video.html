@@ -1,0 +1,23 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Video Authenticity</title>
+  <link rel="stylesheet" href="/frontend/styles.css" />
+</head>
+<body>
+  <div class="container">
+    <h1>Video Authenticity Checker</h1>
+    <div class="upload-area">
+      <input id="videoInput" type="file" accept="video/*" />
+      <button id="analyzeBtn">Analyze Video</button>
+    </div>
+    <div class="video-preview">
+      <video id="preview" controls width="640"></video>
+    </div>
+    <div id="result" class="result-box"></div>
+    <div id="timeline" class="timeline"></div>
+  </div>
+  <script src="/frontend/video_app.js"></script>
+</body>
+</html>

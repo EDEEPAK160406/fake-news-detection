@@ -1,0 +1,11 @@
+[server]
+headless = true
+runOnSave = false
+maxUploadSize = 200
+
+[client]
+showErrorDetails = false
+toolbarMode = "minimal"
+
+[logger]
+level = "warning"

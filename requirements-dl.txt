@@ -1,0 +1,8 @@
+# Optional deep-learning requirements for CNN training/inference
+# Install matching torch+torchvision wheels for your platform. Example for CPU-only on manylinux:
+# pip install torch torchvision --index-url https://download.pytorch.org/whl/cpu
+
+torch
+torchvision
+librosa
+soundfile
